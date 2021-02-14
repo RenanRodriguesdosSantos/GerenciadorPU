@@ -1,0 +1,30 @@
+#divbody{
+    text-align: center;
+}
+
+.red{
+    background-color: #ff0000;
+}
+.green{
+    background-color: #15ff00;
+}
+.yellow{
+    background-color: #fbff00;
+}
+
+#idCanvas{
+    background: #1cf8c8c9;
+    
+}
+
+#columnCanvas{
+    padding: 0;
+    margin: 0px;
+    border: 0px;
+
+}
+
+.headerPhases{
+    width: 60px;
+}
+
