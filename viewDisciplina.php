@@ -33,5 +33,10 @@ echo json_encode($dados);
 </head>
 <body>
     <a href="canvas.php">Painel de Controle</a>
+    <form action="">
+    
+    <input type="range" id="tempo" name="tempo" value="0" min="0" max="25" oninput="display.value=value" onchange="display.value=value" required>
+    <input type="number" id="display" value="0" min="0" max="25" oninput="tempo.value=value" onchange="tempo.value=value">
+    </form>
 </body>
 </html>
