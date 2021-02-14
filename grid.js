@@ -136,23 +136,23 @@ class Grid{
                             switch (k) {
                                 case 1:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 2:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 3:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 4:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 5:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                             }
                         }

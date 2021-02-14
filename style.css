@@ -1,0 +1,99 @@
+* {
+    font-family: "Montserrat";
+    background-color: rgb(146, 250, 243);
+}
+
+.main {
+    margin-top: 0;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.main img {
+    height: 45%;
+    width: 45%;
+    margin-top: 1rem;
+}
+
+.main button {
+    margin-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+#title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.content {
+    display: grid;
+    /*background-color: green;*/
+    padding-top: 2rem;
+}
+
+.back {
+    margin-top: 0;
+    /*background-color: orange;*/
+    margin-left: 1rem;
+    width: 35px;
+    height: 35px;
+}
+
+#titlecontent {
+    margin-top: 0;
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: rgb(238, 26, 26);
+    text-shadow: 2px 2px rgb(163, 4, 4);
+}
+
+#content {
+    margin-top: 1rem;
+    margin-left: 5rem;
+    margin-right: 7rem;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid;
+    border-radius: 1.2rem;
+    padding: 0.8rem;
+    box-shadow: 10px 10px 10px rgb(153, 153, 152);
+}
+
+
+.flutuarmain {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+    /*background-color: hotpink;*/
+    float: left;
+    width: 70%;
+    height: 100%;
+}
+
+.flutuarmain h1 {
+    font-weight: bolder;
+    padding-bottom: 0.8rem;
+}
+
+.flutuarlinks {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+    /*background-color: indigo;*/
+    float: right;
+    width: 30%;
+    height: 100%;
+}
+
+.flutuarlinks h3 {
+    font-weight: bolder;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.flutuarlinks ul {
+    padding-top: 1rem;
+}
