@@ -136,23 +136,23 @@ class Grid{
                             switch (k) {
                                 case 1:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 2:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 3:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 4:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 5:
                                     document.body.style.cursor = "pointer";
-                                    this.url = "viewDisciplina.php?id" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                             }
                         }
@@ -167,7 +167,7 @@ class Grid{
     }
     onClick(ev, url){
         if(this.url){
-            window.location.replace(this.url);
+            window.location.href =  this.url;
         }
     }
 
@@ -183,7 +183,7 @@ class Grid{
             context.moveTo(x, y);
             for(var j = 0; j < this.fase.length; j++){
                 for(var k = 0; k < this.fase[j].iteracao.length; k++){
-                    y = ((i + 1) * 50) + 100 - (this.fase[j].iteracao[k].disciplinas[i].tempo);
+                    y = ((i + 1) * 50) + 100 - (this.fase[j].iteracao[k].disciplinas[i].tempo * 2);
                     x += 80 + (this.fase[j].iteracao.length == 1?80:0);
                     context.lineTo(x - (this.fase[j].iteracao.length == 1?80:40), y);
                 }

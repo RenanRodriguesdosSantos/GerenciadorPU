@@ -1,0 +1,104 @@
+.tema{
+    font-family: "Montserrat";
+    background-color: rgb(146, 250, 243);
+}
+
+.main img {
+    height: 45%;
+    width: 45%;
+    margin-top: 1rem;
+}
+
+.main button {
+    margin-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+#title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.back {
+    margin-top: 0;
+    margin-left: 1rem;
+    width: 35px;
+    height: 35px;
+}
+
+#titlecontent {
+    margin-top: 0;
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: rgb(238, 26, 26);
+    text-shadow: 2px 2px rgb(163, 4, 4);
+}
+
+#content {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid;
+    border-radius: 1.2rem;
+    box-shadow: 10px 10px 10px rgb(153, 153, 152);
+}
+
+
+.flutuarmain {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+}
+
+.flutuarmain h1 {
+    font-weight: bolder;
+    padding-bottom: 0.8rem;
+}
+
+.flutuarlinks {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+}
+
+.flutuarlinks h3 {
+    font-weight: bolder;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.flutuarlinks ul {
+    padding-top: .5rem;
+}
+
+
+/* EDITOR DE TEXTO */
+.tool-list{
+    display: flex;
+    flex-flow: row nowrap;
+    list-style: none;
+    overflow: hidden;
+    border-radius: 10px;
+    padding: 0px;
+}
+.tool-btn{
+    display: block;
+    border: none;
+    font: 20px;
+}
+
+#output{
+    height: 350px;
+    overflow: auto;
+    box-shadow: 0 10px 20px rgb(0, 0,0,0.19), 0 6px 6px rgb(0, 0, 0, 0.23);
+}
+
+#card-edit{
+    height: 360px;
+}
+
+.tool-select{
+    font-size: 14px;
+}
