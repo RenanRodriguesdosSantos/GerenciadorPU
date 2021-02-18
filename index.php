@@ -13,18 +13,31 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     </head>
     <body>
+
+<?php
+include_once("conexao.php");
+
+/*if(isset($_GET['erro']))
+{
+		if($_GET['erro'] == 'senha'){ // se for erro de login e senha
+			echo "<div class='alert alert-danger'>Login ou senha incorretos!</div><hr>";
+		}
+}*/
+
+?>
+
         <div class="main">
             <img src="images/main.png" alt="RUP" class='rounded mx-auto d-block'>
             <div class="main" id="title">
                 Login
             </div>
-            <form>
+            <form action="logar.php" method="POST">
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email</label>
+                    <label for="exampleInputEmail1" class="form-label" name="user">Usuário</label>
                     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Senha</label>
+                    <label for="exampleInputPassword1" class="form-label" name="password">Senha</label>
                     <input type="password" class="form-control" id="exampleInputPassword1">
                 </div>
                 <button type="submit" class="btn btn-primary">Entrar</button>
