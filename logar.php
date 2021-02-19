@@ -7,9 +7,9 @@ $login = $_POST['user'];
 $senha = $_POST['password'];
 
 //texto da consulta ao banco de dados
-$consulta = "SELECT * FROM user WHERE user LIKE '$login' AND password LIKE '$senha' ";
+$consulta = "SELECT * FROM users WHERE user LIKE '$login' AND password LIKE '$senha'";
 //efetivação da consulta ao banco de dados
-$resultado = mysqli_query($conn, $consulta);
+$resultado = mysqli_query($conexao, $consulta);
 
 // Retorna a quantidade de linhas da consulta
   $quantidade=mysqli_num_rows($resultado);
@@ -22,7 +22,7 @@ $resultado = mysqli_query($conn, $consulta);
 	//criar a sessão
 	$_SESSION['user'] = $linha['user'];
 	//redirecionar para a página inicial
-	header('Location:main.php');
+	header('Location:canvas.php');
  }else{ //login ou senha incorretos
 	//redireciona para o formulário de login
 	header('Location:index.php?erro=senha');		

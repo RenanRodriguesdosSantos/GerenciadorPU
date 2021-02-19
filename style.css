@@ -1,6 +1,11 @@
-.tema{
+* {
     font-family: "Montserrat";
-    background-color: rgb(146, 250, 243);
+}
+
+.main {
+    margin-top: 0;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .main img {
