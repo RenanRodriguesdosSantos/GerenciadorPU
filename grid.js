@@ -12,7 +12,7 @@ class Grid{
         this.precherGrid();
         var context = this.canvas.getContext("2d");
         context.beginPath();
-        this.canvas.addEventListener("mousemove", e => this.onMouse(e,this.fase),false);
+        this.canvas.addEventListener("mousemove", e => this.onMouse(e,this.fase, this.canvas),false);
         this.canvas.addEventListener("click", e => this.onClick(e,this.url),false);
         
         context.translate(0.5,0.5);
@@ -86,7 +86,7 @@ class Grid{
         this.fase.push(fase);
     }
 
-    onMouse(ev, fase){
+    onMouse(ev, fase, canvas){
         var x, y;
         if (ev.layerX || ev.layerX == 0) { 
             x = ev.layerX;
@@ -104,23 +104,23 @@ class Grid{
                     if(x >= (multp * 80) && x < (160  + (multp * 80)) && y >= (j*50) + 50 && y <((j * 50) + 100)){
                         switch (j) {
                             case 1:
-                                document.body.style.cursor = "pointer";
+                                canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
                             case 2:
-                                document.body.style.cursor = "pointer";
+                                canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
                             case 3:
-                                document.body.style.cursor = "pointer";
+                                canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
                             case 4:
-                                document.body.style.cursor = "pointer";
+                                canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
                             case 5:
-                                document.body.style.cursor = "pointer";
+                                canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
                             
@@ -135,23 +135,23 @@ class Grid{
                         if(x >= (80 + ((j+1) * 80 + (multp * 80))) && x < (160 + ((j+1) * 80 + (multp * 80))) && y >= ((k*50) + 50) && y <((k * 50) + 100)){
                             switch (k) {
                                 case 1:
-                                    document.body.style.cursor = "pointer";
+                                    canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 2:
-                                    document.body.style.cursor = "pointer";
+                                    canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 3:
-                                    document.body.style.cursor = "pointer";
+                                    canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 4:
-                                    document.body.style.cursor = "pointer";
+                                    canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                                 case 5:
-                                    document.body.style.cursor = "pointer";
+                                    canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
                             }
@@ -160,7 +160,7 @@ class Grid{
                 }
             }
             if(x < 160 || y < 100){
-                document.body.style.cursor = "";
+                canvas.style.cursor = "";
                 this.url = "";
             }
         }

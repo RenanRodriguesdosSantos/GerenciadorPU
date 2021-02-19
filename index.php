@@ -33,12 +33,12 @@ include_once("conexao.php");
             </div>
             <form action="logar.php" method="POST">
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" name="user">Usuário</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="exampleInputEmail1" class="form-label" >Usuário</label>
+                    <input type="email" class="form-control" name="user" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label" name="password">Senha</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
+                    <label for="exampleInputPassword1" class="form-label" >Senha</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
                 </div>
                 <button type="submit" class="btn btn-primary">Entrar</button>
             </form>
