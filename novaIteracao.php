@@ -16,8 +16,7 @@ try {
     $consulta = "INSERT INTO iteracao (nome,id_fase) VALUES (CONCAT('$nome',@iter),$fase)";
     mysqli_query($conexao, $consulta);
     $idIteracao = mysqli_insert_id($conexao);
-    echo $idIteracao;
-    $consulta = "insert into disciplina_iteracao (id_iteracao,disciplina)  values ('$idIteracao','D1'),('$idIteracao','D2'),('$idIteracao','D3'),('$idIteracao','D4'),('$idIteracao','D5')";
+    $consulta = "insert into disciplina_iteracao (id_iteracao,disciplina)  values ('$idIteracao','D1'),('$idIteracao','D2'),('$idIteracao','D3'),('$idIteracao','D4'),('$idIteracao','D5'),('$idIteracao','D6')";
     mysqli_query($conexao, $consulta);
     mysqli_commit($conexao);
     header("Location: canvas.php");
@@ -25,3 +24,5 @@ try {
     mysqli_rollback($conexao);
     throw $e;
 }
+
+header("Location: canvas.php");

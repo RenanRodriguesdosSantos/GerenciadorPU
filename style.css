@@ -1,6 +1,11 @@
-.tema{
+* {
     font-family: "Montserrat";
-    background-color: rgb(146, 250, 243);
+}
+
+.main {
+    margin-top: 0;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .main img {
@@ -73,6 +78,20 @@
     padding-top: .5rem;
 }
 
+#artefatos{
+    display: none;
+}
+
+#placeholderArtefatos{
+    color: rgb(119, 117, 117);
+}
+
+#artefatosCustum{
+    height: 150px;
+    padding: 5px;
+    box-sizing: border-box;
+    border: solid 1px #000;
+}
 
 /* EDITOR DE TEXTO */
 .tool-list{

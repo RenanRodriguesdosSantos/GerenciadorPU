@@ -18,7 +18,7 @@ class Grid{
         context.translate(0.5,0.5);
         context.moveTo(0, 0);
         context.lineTo(this.canvas.width, 0);
-        for(var y = 100; y < 470; y += 50){
+        for(var y = 100; y < 570; y += 50){
             context.moveTo(0, y);
             context.lineTo(this.canvas.width, y);
         }
@@ -27,16 +27,19 @@ class Grid{
         context.fillText("Disciplinas", 30, 35);
         context.fillText("X", 70, 60);
         context.fillText("Fases", 50, 80);
-        context.fillText("    Requisitos", 15, 130);
-        context.fillText("      Análise", 15, 180);
-        context.fillText("      Projeto",15, 230);
+        context.font = "bold 16px sans-serif"
+        context.fillText("Modelo de Negócios", 2, 130);
+        context.font = "bold 18px sans-serif"
+        context.fillText("      Requisitos", 15, 180);
+        context.fillText("Análise e Design",9, 230);
         context.fillText("Implementação",15, 280);
         context.fillText("         Teste", 15, 330);
+        context.fillText("   Implantação", 15, 380);
         context.moveTo(0, 0);
-        context.lineTo(0, 350);
+        context.lineTo(0, 400);
 
         context.moveTo(160, 0);
-        context.lineTo(160, 350);
+        context.lineTo(160, 400);
 
         context.moveTo(160,50);
         context.lineTo(this.canvas.width, 50);
@@ -48,7 +51,7 @@ class Grid{
                 multp += this.fase[j].iteracao.length == 1?1:0;
             }
             context.moveTo(160  + (multp * 80), 0);
-            context.lineTo(160  + (multp * 80), 350);
+            context.lineTo(160  + (multp * 80), 400);
 
             if(this.fase[i].iteracao.length == 1){
                 context.fillText(this.fase[i].titulo,(multp * 80) - ((this.fase[i].iteracao.length * 80)/2) + 80, 32)
@@ -60,7 +63,7 @@ class Grid{
                 for(var j = 0; j < this.fase[i].iteracao.length; j++){
                     context.fillText(this.fase[i].iteracao[j].nome, 110 + ((j+1) * 80 + (multp * 80)), 80);
                     context.moveTo(160 + ((j+1) * 80 + (multp * 80)),50);
-                    context.lineTo(160 + ((j+1) * 80 + (multp * 80)), 350);
+                    context.lineTo(160 + ((j+1) * 80 + (multp * 80)), 400);
                 }
             }
         }
@@ -100,7 +103,7 @@ class Grid{
                 multp += fase[j].iteracao.length == 1?1:0;
             }
             if(fase[i].iteracao.length <= 1){
-                for(var j = 1; j <= 5; j++){
+                for(var j = 1; j <= 6; j++){
                     if(x >= (multp * 80) && x < (160  + (multp * 80)) && y >= (j*50) + 50 && y <((j * 50) + 100)){
                         switch (j) {
                             case 1:
@@ -123,6 +126,10 @@ class Grid{
                                 canvas.style.cursor = "pointer";
                                 this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
                                 break;
+                            case 6:
+                                canvas.style.cursor = "pointer";
+                                this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
+                                break;
                             
                         }
                     }
@@ -131,7 +138,7 @@ class Grid{
             else{
                 multp -= this.fase[i].iteracao.length;
                 for(var j = 0; j < fase[i].iteracao.length; j++){
-                    for(var k = 1; k <= 5; k++){
+                    for(var k = 1; k <= 6; k++){
                         if(x >= (80 + ((j+1) * 80 + (multp * 80))) && x < (160 + ((j+1) * 80 + (multp * 80))) && y >= ((k*50) + 50) && y <((k * 50) + 100)){
                             switch (k) {
                                 case 1:
@@ -154,6 +161,10 @@ class Grid{
                                     canvas.style.cursor = "pointer";
                                     this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
                                     break;
+                                case 6:
+                                    canvas.style.cursor = "pointer";
+                                    this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                    break;
                             }
                         }
                     }
@@ -173,8 +184,8 @@ class Grid{
 
     precherGrid(){
         var context = this.canvas.getContext("2d");
-        var cores = ["#FF0000","#FFFF00","#008000","#000080","#FF4500"];
-        for(var i = 0; i < 5; i++){
+        var cores = ["#FF0000","#FFA500","#FFD700","#FFFF00","#008000","#00BFFF"];
+        for(var i = 0; i < 6; i++){
             var y =  ((i+1)*50) + 100;
             var x = 160;
             y =  ((i+1)*50) + 100;

@@ -14,7 +14,7 @@
         <h2 class="text-center">Laboratório de Processo Unificado</h2>
         <div class="row">
             <div class="col-md-12">
-                <canvas id="idCanvas" width="600" height="351" ></canvas>
+                <canvas id="idCanvas" width="600" height="401" ></canvas>
             </div>
         </div>
         <div class="row justify-content-center">

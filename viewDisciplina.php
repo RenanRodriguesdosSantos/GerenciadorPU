@@ -12,11 +12,12 @@ $resultado = mysqli_query($conexao, $consulta);
 $dados = [];
 $fases = ["Início","Elaboração","Contrução","Transição"];
 $disciplinas = [
-    "D1" => "Requisitos",
-    "D2" => "Análise",
-    "D3" => "Projeto",
+    "D1" => "Modelo de Negócios",
+    "D2" => "Requisitos",
+    "D3" => "Análise e Design",
     "D4" => "Implementação",
-    "D5" => "Teste"
+    "D5" => "Teste",
+    "D6" => "Implantação"
 ];
 if($row = mysqli_fetch_assoc($resultado)){
     $dados = [
@@ -29,6 +30,18 @@ if($row = mysqli_fetch_assoc($resultado)){
     ];
 }
 
+$consulta = "SELECT * FROM artefatos WHERE id_disciplina_iteracao = '$id'";
+
+$resultado = mysqli_query($conexao, $consulta);
+$artefatos = [];
+$i = 0;
+while ($row = mysqli_fetch_assoc($resultado)) {
+    $artefatos[$i] = [
+        "nome" => $row["nome"],
+        "id" => $row["id"]
+    ];
+    $i++;
+}
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +83,7 @@ if($row = mysqli_fetch_assoc($resultado)){
                         </div>
                         <div class="col-md-12 text-center mt-3">
                             <button type="button" class="btn btn-primary col-md-5" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Editar Página</button>
-                            <form action="editarDisciplina.php?id=<?php echo $id;?>" method="post" onSubmit="salvar()">
+                            <form action="editarDisciplina.php?id=<?php echo $id;?>" method="post" onSubmit="salvar()" enctype="multipart/form-data">
                                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
@@ -92,12 +105,25 @@ if($row = mysqli_fetch_assoc($resultado)){
                                                         <hr/>
                                                     </div>
                                                     <div class="row">
-                                                        <div class=">
+                                                        <div>
                                                             <label for="resumo" class="form-label">Resumso das Atividades:</label>
                                                             <textarea class="form-control" id="resumo" name="resumo" rows="3" placeholder="Resumo das Atividades desenvolvidas nessa iteração e disciplina"><?php echo $dados["resumo"];?></textarea>
                                                         </div>
                                                     </div>
-                                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                                    <hr/>
+                                                    <div class="row">
+                                                        <label class="form-label">Artefatos</label>
+                                                        <input type="file" multiple name="artefatos[]" id="artefatos"/>
+                                                        <div id="artefatosCustum" onClick="defaultInputActive()" 
+                                                            ondragenter="event.stopPropagation();event.preventDefault();"
+                                                            ondragover="event.stopPropagation();event.preventDefault();"
+                                                            ondrop="doDrop(event);"
+                                                        >
+                                                            <div id="artefatosCustumInterna" class="row">
+                                                                <span id="placeholderArtefatos">Clique para selecionar ou arraste os arquivos!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6" >
                                                     <div class="card">
@@ -163,15 +189,6 @@ if($row = mysqli_fetch_assoc($resultado)){
                                                                         <option value="black">Black</option>
                                                                     </select>
                                                                 </li>
-                                                                <li class="tool">
-                                                                    <select class="tool-select" onChange="formatDoc('fontname',this[this.selectedIndex].value);this.selectedIndex=0;">
-                                                                        <option selected>- Fonte -</option>
-                                                                        <option>Arial</option>
-                                                                        <option>Arial Black</option>
-                                                                        <option>Courier New</option>
-                                                                        <option>Times </option>
-                                                                    </select>
-                                                                </li>
                                                             </ul>
                                                         </div>
                                                         <input type="hidden" name="texto" id="texto">
@@ -193,17 +210,51 @@ if($row = mysqli_fetch_assoc($resultado)){
                 </div>
                 <div class="col-md-3">
                     <div class="flutuarlinks">
-                        <h3>Anexos</h3>
-                        <ul>Link 1</ul>
-                        <ul>Link 1</ul>
-                        <ul>Link 1</ul>
-                        <ul>Link 1</ul>
-                        <ul>Link 1</ul>
-                        <ul>Link 1</ul>
+                        <h3>Artefatos</h3>
+                        <ul>
+                            <?php 
+                                for ($i=0; $i < count($artefatos); $i++) { 
+                                    $nome = $artefatos[$i]["nome"];
+                                    echo "<li><a href='uploads/$nome?id=$id'>$nome</a></li>";
+                                }
+                            ?>
+                        </ul>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#excluirAnexos">Excluir Artefatos</button>
+                        <form action="excluirAnexos.php?id=<?php echo $id;?>" method="post">
+                            <div class="modal fade" id="excluirAnexos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Excluir Artefatos</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                                <div class="row">
+                                                    <label for="anexos">Selecione: </label>
+                                                    <select class="p-2" name="anexos[]" id="anexos" multiple size="10">
+                                                        <?php 
+                                                            for ($i=0; $i < count($artefatos); $i++) { 
+                                                                $nome = $artefatos[$i]["nome"];
+                                                                $idAnexo = $artefatos[$i]["id"];
+                                                                echo "<option value='$idAnexo'>$nome</option>";
+                                                            }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Confirmar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <script src="editText.js"></script>
+        <script src="editArtefatos.js"></script>
     </body>
 </html>

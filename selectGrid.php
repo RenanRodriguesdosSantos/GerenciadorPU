@@ -6,8 +6,6 @@ $parametros = "f.id as idf, f.nome as nomef, i.id as idi, i.nome as nomei, di.id
 $consulta = "SELECT $parametros FROM fase f inner join iteracao i on (f.id = i.id_fase) inner join disciplina_iteracao di on (di.id_iteracao = i.id)";
 $resultado = mysqli_query($conexao, $consulta);
 
-$jsonFases = array();
-$iteracaos = array();
 $fases = array();
 $rows = [];
 $i = 0;
@@ -48,15 +46,15 @@ foreach ($rows as  $value) {
 /// INICIO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($inicio) / 5; $i++){
-    $aux = $inicio[($i*5)];
+for($i = 0; $i < sizeof($inicio) / 6; $i++){
+    $aux = $inicio[($i*6)];
     $aux2 = $inicio;
     $disciplina = array();
-    for($j = 0; $j < 5; $j++){
+    for($j = 0; $j < 6; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*5)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*5)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*5)]["tempo"]
+            "id" => $aux2[$j + ($i*6)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*6)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -70,15 +68,15 @@ $fases[0] = ["id" => "1", "nome" => "inicio", "titulo" => "Início", "iteracao" 
 /// ELABORAÇÃO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($elaboracao) / 5; $i++){
-    $aux = $elaboracao[($i*5)];
+for($i = 0; $i < sizeof($elaboracao) / 6; $i++){
+    $aux = $elaboracao[($i*6)];
     $aux2 = $elaboracao;
     $disciplina = array();
-    for($j = 0; $j < 5; $j++){
+    for($j = 0; $j < 6; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*5)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*5)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*5)]["tempo"]
+            "id" => $aux2[$j + ($i*6)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*6)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -93,15 +91,15 @@ $fases[1] = ["id" => "2", "nome" => "elaboracao", "titulo" => "Elaboração", "i
 ///CONSTRUCAO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($construcao) / 5; $i++){
-    $aux = $construcao[($i*5)];
+for($i = 0; $i < sizeof($construcao) / 6; $i++){
+    $aux = $construcao[($i*6)];
     $aux2 = $construcao;
     $disciplina = array();
-    for($j = 0; $j < 5; $j++){
+    for($j = 0; $j < 6; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*5)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*5)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*5)]["tempo"]
+            "id" => $aux2[$j + ($i*6)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*6)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -111,20 +109,20 @@ for($i = 0; $i < sizeof($construcao) / 5; $i++){
     ];
 }
 
-$fases[2] = ["id" => "2", "nome" => "contrucao", "titulo" => "Contrução", "iteracao" => $iteracao];
+$fases[2] = ["id" => "3", "nome" => "contrucao", "titulo" => "Contrução", "iteracao" => $iteracao];
 
 /// TRANSICAO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($transicao) / 5; $i++){
-    $aux = $transicao[($i*5)];
+for($i = 0; $i < sizeof($transicao) / 6; $i++){
+    $aux = $transicao[($i*6)];
     $aux2 = $transicao;
     $disciplina = array();
-    for($j = 0; $j < 5; $j++){
+    for($j = 0; $j < 6; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*5)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*5)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*5)]["tempo"]
+            "id" => $aux2[$j + ($i*6)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*6)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -134,7 +132,7 @@ for($i = 0; $i < sizeof($transicao) / 5; $i++){
     ];
 }
 
-$fases[3] = ["id" => "2", "nome" => "transicao", "titulo" => "Transição", "iteracao" => $iteracao];
+$fases[3] = ["id" => "4", "nome" => "transicao", "titulo" => "Transição", "iteracao" => $iteracao];
 
 
 
