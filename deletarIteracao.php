@@ -1,5 +1,13 @@
 <?php
 
+session_start();
+if(!isset($_SESSION['idUser'])){
+    unset($_SESSION['idUser']);
+    unset($_SESSION['user']);
+    session_unset();
+    header("location: index.php");
+}
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 include_once("conexao.php");
 

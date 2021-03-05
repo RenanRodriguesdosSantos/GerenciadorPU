@@ -1,4 +1,11 @@
 <?php
+session_start();
+if(!isset($_SESSION['idUser'])){
+    unset($_SESSION['idUser']);
+    unset($_SESSION['user']);
+    session_unset();
+    header("location: index.php");
+}
 
 include_once("conexao.php");
 
@@ -46,15 +53,15 @@ foreach ($rows as  $value) {
 /// INICIO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($inicio) / 6; $i++){
-    $aux = $inicio[($i*6)];
+for($i = 0; $i < sizeof($inicio) / 9; $i++){
+    $aux = $inicio[($i*9)];
     $aux2 = $inicio;
     $disciplina = array();
-    for($j = 0; $j < 6; $j++){
+    for($j = 0; $j < 9; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*6)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*6)]["tempo"]
+            "id" => $aux2[$j + ($i*9)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*9)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*9)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -68,15 +75,15 @@ $fases[0] = ["id" => "1", "nome" => "inicio", "titulo" => "Início", "iteracao" 
 /// ELABORAÇÃO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($elaboracao) / 6; $i++){
-    $aux = $elaboracao[($i*6)];
+for($i = 0; $i < sizeof($elaboracao) / 9; $i++){
+    $aux = $elaboracao[($i*9)];
     $aux2 = $elaboracao;
     $disciplina = array();
-    for($j = 0; $j < 6; $j++){
+    for($j = 0; $j < 9; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*6)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*6)]["tempo"]
+            "id" => $aux2[$j + ($i*9)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*9)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*9)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -91,15 +98,15 @@ $fases[1] = ["id" => "2", "nome" => "elaboracao", "titulo" => "Elaboração", "i
 ///CONSTRUCAO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($construcao) / 6; $i++){
-    $aux = $construcao[($i*6)];
+for($i = 0; $i < sizeof($construcao) / 9; $i++){
+    $aux = $construcao[($i*9)];
     $aux2 = $construcao;
     $disciplina = array();
-    for($j = 0; $j < 6; $j++){
+    for($j = 0; $j < 9; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*6)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*6)]["tempo"]
+            "id" => $aux2[$j + ($i*9)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*9)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*9)]["tempo"]
         ];
     }
     $iteracao[$i] = [
@@ -114,15 +121,15 @@ $fases[2] = ["id" => "3", "nome" => "contrucao", "titulo" => "Contrução", "ite
 /// TRANSICAO
 $iteracao = [];
 
-for($i = 0; $i < sizeof($transicao) / 6; $i++){
-    $aux = $transicao[($i*6)];
+for($i = 0; $i < sizeof($transicao) / 9; $i++){
+    $aux = $transicao[($i*9)];
     $aux2 = $transicao;
     $disciplina = array();
-    for($j = 0; $j < 6; $j++){
+    for($j = 0; $j < 9; $j++){
         $disciplina[$j] = [
-            "id" => $aux2[$j + ($i*6)]["iddi"],
-            "disciplinas" => $aux2[$j + ($i*6)]["disciplina"],
-            "tempo" => $aux2[$j + ($i*6)]["tempo"]
+            "id" => $aux2[$j + ($i*9)]["iddi"],
+            "disciplinas" => $aux2[$j + ($i*9)]["disciplina"],
+            "tempo" => $aux2[$j + ($i*9)]["tempo"]
         ];
     }
     $iteracao[$i] = [

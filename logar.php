@@ -13,7 +13,6 @@ $resultado = mysqli_query($conexao, $consulta);
 
 // Retorna a quantidade de linhas da consulta
   $quantidade=mysqli_num_rows($resultado);
-  echo $quantidade;
 //vamos testar se o retorno foi de apenas UMA linha , ou seja, login E senha corretos.
   if($quantidade == 1) //login E senha corretos
  {
@@ -22,6 +21,7 @@ $resultado = mysqli_query($conexao, $consulta);
  	$linha = mysqli_fetch_assoc($resultado);
 // 	//criar a sessão
  	$_SESSION['user'] = $linha['user'];
+ 	$_SESSION['idUser'] = $linha['id'];
 	//redirecionar para a página inicial
 	header('Location:canvas.php');
 	}else{ //login ou senha incorretos

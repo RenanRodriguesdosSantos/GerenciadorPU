@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+if(!isset($_SESSION['idUser'])){
+    unset($_SESSION['idUser']);
+    unset($_SESSION['user']);
+    session_unset();
+    header("location: index.php");
+}
 include_once("conexao.php");
 
 $tempo  = $_POST["tempo"];

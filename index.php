@@ -17,31 +17,33 @@
 <?php
 include_once("conexao.php");
 
-/*if(isset($_GET['erro']))
+if(isset($_GET['erro']))
 {
 		if($_GET['erro'] == 'senha'){ // se for erro de login e senha
 			echo "<div class='alert alert-danger'>Login ou senha incorretos!</div><hr>";
 		}
-}*/
+}
 
 ?>
 
-        <div class="main">
-            <img src="images/main.png" alt="RUP" class='rounded mx-auto d-block'>
-            <div class="main" id="title">
-                Login
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-3 mt-md-5">
+                <img id="logo" src="images/main.png" alt="RUP" class='rounded mx-auto d-block'>
+                <div class="main" id="title">
+                    Login
+                </div>
+                <form action="logar.php" method="POST">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label" >Usuário</label>
+                        <input type="text" class="form-control" name="user" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label" >Senha</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Senha">
+                    </div>
+                    <button type="submit" class="btn btn-primary col-md-12">Entrar</button>
+                </form>
             </div>
-            <form action="logar.php" method="POST">
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" >Usuário</label>
-                    <input type="text" class="form-control" name="user" id="exampleInputEmail1" aria-describedby="emailHelp">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label" >Senha</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
         </div>
     </body>
 </html>
