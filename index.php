@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>RUP</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="frontend/style.css">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Montserrat');
         </style>
@@ -15,8 +15,6 @@
     <body>
 
 <?php
-include_once("conexao.php");
-
 if(isset($_GET['erro']))
 {
 		if($_GET['erro'] == 'senha'){ // se for erro de login e senha
@@ -28,11 +26,11 @@ if(isset($_GET['erro']))
 
         <div class="row align-items-center justify-content-center">
             <div class="col-md-3 mt-md-5">
-                <img id="logo" src="images/main.png" alt="RUP" class='rounded mx-auto d-block'>
+                <img id="logo" src="frontend/images/main.png" alt="RUP" class='rounded mx-auto d-block'>
                 <div class="main" id="title">
                     Login
                 </div>
-                <form action="logar.php" method="POST">
+                <form action="backend/logar.php" method="POST">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label" >Usuário</label>
                         <input type="text" class="form-control" name="user" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail">
