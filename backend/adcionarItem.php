@@ -8,6 +8,10 @@ if(!isset($_SESSION['idUser'])){
 }
 
 include_once("conexao.php");
+include_once("acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
+
 $id = $_POST["id"];
 $topico = $_POST["topico"];
 $artefato = $_GET["artefato"];
@@ -17,7 +21,7 @@ if($_POST["tipo"] == "subconteudo"){
     $resutado = mysqli_query($conexao,"SELECT id FROM subconteudo WHERE id_conteudo = '$conteudo' AND titulo LIKE '$topico'");
     if(mysqli_num_rows($resutado) > 0){
         echo "<h1>Não é possível salvar dois tópicos com mesmo nome na mesma sessão!</h1> ";
-        echo "<h2><a href='../frontend/editArtefato.php?id=$artefato'>Voltar</a></h2> ";
+        echo "<h2><a href='../frontend/editArtefato.php?id=$artefato&projeto=$projeto'>Voltar</a></h2> ";
     }
     else{
         if($id == ""){
@@ -28,7 +32,7 @@ if($_POST["tipo"] == "subconteudo"){
             $consulta = "UPDATE subconteudo SET titulo = '$topico' WHERE id = '$id'";
             mysqli_query($conexao,$consulta);
         }
-        header("Location: ../frontend/editArtefato.php?id=$artefato");
+        header("Location: ../frontend/editArtefato.php?id=$artefato&projeto=$projeto");
     }
 }
 else if($_POST["tipo"] == "subconteudo2"){
@@ -36,7 +40,7 @@ else if($_POST["tipo"] == "subconteudo2"){
     $resutado = mysqli_query($conexao,"SELECT id FROM subconteudo2 WHERE id_subconteudo = '$subconteudo' AND titulo LIKE '$topico'");
     if(mysqli_num_rows($resutado) > 0){
         echo "<h1>Não é possível salvar dois tópicos com mesmo nome na mesma sessão!</h1> ";
-        echo "<h2><a href='../frontend/editArtefato.php?id=$artefato'>Voltar</a></h2> ";
+        echo "<h2><a href='../frontend/editArtefato.php?id=$artefato&projeto=$projeto'>Voltar</a></h2> ";
     }
     else{
         if($id == ""){
@@ -48,7 +52,7 @@ else if($_POST["tipo"] == "subconteudo2"){
             $consulta = "UPDATE subconteudo2 SET titulo = '$topico' WHERE id = '$id'";
             mysqli_query($conexao,$consulta);
         }
-        header("Location: ../frontend/editArtefato.php?id=$artefato");
+        header("Location: ../frontend/editArtefato.php?id=$artefato&projeto=$projeto");
     }
 }
 

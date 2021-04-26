@@ -1,5 +1,5 @@
 var grid = new Grid();
-fetch("../backend/selectGrid.php")
+fetch("../backend/selectGrid.php?projeto="+idProjeto)
 .then(response => response.json())
 .then(response => {
     grid.addFases(response);
@@ -30,11 +30,11 @@ function confirmarDelecao(fase){
     });
 }
 
-function deletarIteracao(fase,id) {
+function deletarIteracao(fase,id,projeto) {
     confirmarDelecao(fase)
     .then(response =>{
         if(response){
-            window.location.href = "../backend/deletarIteracao.php?id=" + id;
+            window.location.href = "../backend/deletarIteracao.php?id=" + id + "&projeto=" + projeto;
         }
     })
 }

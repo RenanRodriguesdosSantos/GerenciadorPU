@@ -7,6 +7,12 @@
         header("location: ../index.php");
     }
     $user = $_SESSION["user"];
+
+    include_once("../backend/conexao.php");
+    include_once("../backend/acessarProjeto.php");
+    $nomeProjeto = acessarProjeto($_GET["projeto"],$conexao);
+    $projeto = $_GET["projeto"]; 
+    
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -19,14 +25,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="confirmarSenha.js"></script>
+    <?php  echo "<script>var idProjeto=$projeto;</script>";?>
 </head>
 <body>
     <div class="container-fluid">
         <br/>
         <div class="row">
-            <div class="col-md-11">
-                <h2 class="text-center">Laboratório de Processo Unificado</h2>
-            </div>
+                <div class="col-md-1">
+                    <a href="projetos.php"><img class="back" src="images/back.png" alt="Voltar"></a>
+                </div>
+                <div class="col-md-10">
+                    <div class="content">
+                        <div id="titlecontent">
+                            <?php echo $nomeProjeto;?>
+                        </div>
+                    </div>
+                </div>
             <div class="col-md-1">
                 <div class="btn-group dropend">
                     <button class="btn btn-success btn-lg text-uppercase rounded-circle pb-md-2 pt-md-2 ps-md-3 pe-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <form action="alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
+                <form action="../backend/alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
                     <div class="modal fade" id="modalAlterarSenha" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -112,10 +126,10 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                            <a href="../backend/novaIteracao.php?fase=1" class="btn btn-success border col-md-12">Nova Iteração no Início</a>
-                                <a href="../backend/novaIteracao.php?fase=2" class="btn btn-success border col-md-12">Nova Iteração na Elaboração</a>
-                                <a href="../backend/novaIteracao.php?fase=3" class="btn btn-success border col-md-12">Nova Iteração na Contrução</a>
-                                <a href="../backend/novaIteracao.php?fase=4" class="btn btn-success border col-md-12">Nova Iteração na Transição</a>
+                                <a href="../backend/novaIteracao.php?fase=1&projeto=<?php echo $projeto;?>" class="btn btn-success border col-md-12">Nova Iteração no Início</a>
+                                <a href="../backend/novaIteracao.php?fase=2&projeto=<?php echo $projeto;?>" class="btn btn-success border col-md-12">Nova Iteração na Elaboração</a>
+                                <a href="../backend/novaIteracao.php?fase=3&projeto=<?php echo $projeto;?>" class="btn btn-success border col-md-12">Nova Iteração na Contrução</a>
+                                <a href="../backend/novaIteracao.php?fase=4&projeto=<?php echo $projeto;?>" class="btn btn-success border col-md-12">Nova Iteração na Transição</a>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -134,10 +148,10 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Início',1)">Remover a última Iteração do Início</button>
-                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Elaboração',2)">Remover a última Iteração da Elaboração</button>
-                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Construção',3)">Remover a última Iteração da Contrução</button>
-                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Transição',4)">Remover a última Iteração da Transição</button>
+                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Início',1,<?php echo $projeto;?>)">Remover a última Iteração do Início</button>
+                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Elaboração',2,<?php echo $projeto;?>)">Remover a última Iteração da Elaboração</button>
+                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Construção',3,<?php echo $projeto;?>)">Remover a última Iteração da Contrução</button>
+                                <button class="btn btn-danger border col-md-12" onClick="deletarIteracao('Transição',4,<?php echo $projeto;?>)">Remover a última Iteração da Transição</button>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -148,32 +162,6 @@
             </div>
         </div>
         <br><br><br>
-        <div class="row">
-            <div class="col-md-6">
-                <h1 class="text-center">RUP</h1>
-                <p>
-                    <h4>Caracteristicas</h4>
-                    <ul>
-                        <li>Abordagem de orientação a objetos;</li>
-                        <li>Projetado e documentado utilizando o UML para ilustrar os processos;</li>
-                        <li>Incremental e iterativo;</li>
-                        <li>Organiza o desenvolvimento em 4 fases;</li>
-                        <li>Possui atividades lógicas, chamadas de disciplinas;</li>
-                        <li>Costuma ser indicado para projetos com grandes equipes de desenvolvimento e projetos extensos;</li>
-                        <li>Objetivo de garantir a produção de software de alta qualidade que atinja as necessidades dos usuários, dentro de um cronograma e orçamento previsível;</li>
-                    </ul>
-                    <h4>Boas Práticas do RUP</h4>
-                    <ul>
-                        <li>Desenvolver o software iterativamente;</li>
-                        <li>Gerenciar requisitos;</li>
-                        <li>Usar arquiteturas baseadas em componentes;</li>
-                        <li>Modelar software visualmente;</li>
-                        <li>Verificar a qualidade do software;</li>
-                        <li>Controlar as mudanças do software.</li>
-                    </ul>
-                </p>
-            </div>
-        </div>
     </div>
     <script src="grid.js"></script>
     <script src="canvas.js"></script>

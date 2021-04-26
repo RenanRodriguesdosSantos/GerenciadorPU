@@ -64,7 +64,7 @@ class Grid{
                 context.fillText(this.fase[i].titulo,(multp * 80) - ((this.fase[i].iteracao.length * 80)/2) + 80, 32)
                 context.fillText(this.fase[i].iteracao[0].nome, (multp * 80) - ((this.fase[i].iteracao.length * 80)/2) + 110, 80);
             }
-            else{
+            else if(this.fase[i].iteracao.length > 1){
                 context.fillText(this.fase[i].titulo,(multp * 80) - ((this.fase[i].iteracao.length * 80)/2) + 120, 32);
                 multp -= this.fase[i].iteracao.length;
                 for(var j = 0; j < this.fase[i].iteracao.length; j++){
@@ -114,7 +114,7 @@ class Grid{
                     if(x >= (multp * 80) && x < (160  + (multp * 80)) && y >= (j*50) + 50 && y <((j * 50) + 100)){
                         if(j >= 1 && j <= 9){
                             canvas.style.cursor = "pointer";
-                            this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id;
+                            this.url = "viewDisciplina.php?id=" + fase[i].iteracao[0].disciplinas[(j - 1)].id + "&projeto=" + idProjeto;
                         }
                     }
                 }
@@ -126,7 +126,7 @@ class Grid{
                         if(x >= (80 + ((j+1) * 80 + (multp * 80))) && x < (160 + ((j+1) * 80 + (multp * 80))) && y >= ((k*50) + 50) && y <((k * 50) + 100)){
                             if(k >= 1 && k <= 9){
                                 canvas.style.cursor = "pointer";
-                                this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id;
+                                this.url = "viewDisciplina.php?id=" + fase[i].iteracao[j].disciplinas[(k -1)].id + "&projeto=" + idProjeto;
                             }
                         }
                     }

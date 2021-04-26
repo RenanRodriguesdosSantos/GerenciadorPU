@@ -6,7 +6,11 @@ if(!isset($_SESSION['idUser'])){
     session_unset();
     header("location: ../index.php");
 }
+
 include_once("../backend/conexao.php");
+include_once("../backend/acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
 $id = $_GET["id"];
 
 $consulta = "SELECT * FROM conteudo WHERE id_artefato = '$id'";
@@ -14,7 +18,6 @@ $consulta = "SELECT * FROM conteudo WHERE id_artefato = '$id'";
 $resultado = mysqli_query($conexao, $consulta);
 
 $conteudos = [];
-$totalConteudo = 0;
 while ($row = mysqli_fetch_assoc($resultado)) {
     $consulta = "SELECT * FROM subconteudo WHERE id_conteudo = '".$row['id']."'";
     $resultado2 = mysqli_query($conexao, $consulta);
@@ -41,9 +44,8 @@ while ($row = mysqli_fetch_assoc($resultado)) {
             "subconteudos2" => $subconteudos2
         ];
         $subconteudos[] = $item2;
-        $totalConteudo += sizeof($subconteudos2);
     }
-    $totalConteudo += sizeof($subconteudos);
+
     $item = [
         "id" => $row["id"],
         "titulo" => $row["titulo"],
@@ -52,27 +54,6 @@ while ($row = mysqli_fetch_assoc($resultado)) {
         "subconteudos" => $subconteudos
     ];
     $conteudos[] = $item;
-}
-$totalConteudo += sizeof($conteudos);
-$SomaConteudo = 0;
-$quebrarColuna = 0;
-
-foreach ($conteudos as $key => $value) {
-    $somaSubConteudo = 0;
-
-    foreach ($value["subconteudos"] as $value2) {
-        $somaSubConteudo += sizeof($value2["subconteudos2"]);
-    }
-    $SomaConteudo += 1 + sizeof($value["subconteudos"]) + $somaSubConteudo;
-    if($totalConteudo/2 <= $SomaConteudo){
-        if(($totalConteudo - ($SomaConteudo  - (1 + sizeof($value["subconteudos"]) + $somaSubConteudo)) >= $SomaConteudo)){
-            $quebrarColuna = $key+1;
-        }
-        else{
-            $quebrarColuna = $key;
-        }
-        break;
-    }
 }
 
 $consulta = "SELECT * FROM anexos WHERE id_artefato = '$id'";
@@ -108,20 +89,16 @@ if($row = mysqli_fetch_assoc($resultado)){
 </head>
 <body>
     <div class="container">
-        <form action="../backend/salvarArtefato.php?id=<?php echo $id;?>" method="post" enctype="multipart/form-data">
+        <form action="../backend/salvarArtefato.php?id=<?php echo $id;?>&projeto=<?php echo $projeto;?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-12 pt-4">
                     <h2 class="text-center"><?php echo $nomeArtefato;?><h2>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 border border-dark pb-4 pt-3">
+                <div class="col-md-12 border border-dark pb-4 pt-3">
                     <div class="row">
-                        <?php foreach ($conteudos as $key => $value) {
-                            if($quebrarColuna == $key){
-                                echo "</div></div><div class='col-md-6 border border-dark pb-4 pt-3'><div class='row'>";
-                            }
-                        ?>
+                        <?php foreach ($conteudos as $key => $value) {?>
                             <div class="col-md-12">
                                 <label for="resumo" class="form-label"><?php echo ($key+1)."-".$value["titulo"];?></label>
                                 <textarea class="form-control" name="conteudo[<?php echo $value["id"];?>]" rows="3"><?php echo $value["texto"];?></textarea>
@@ -129,9 +106,9 @@ if($row = mysqli_fetch_assoc($resultado)){
                             <?php if($value["editavel"]){
                                     $parametros = "'subconteudo','".$value["titulo"]."','".$value["id"]."'";   
                             ?>
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-10 text-center p-md-3">
-                                        <button type="button" class="btn btn-success col-md-6" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="novoTopico(<?php echo $parametros;?>)">Novo Sub Tópico</button>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-11 text-center p-md-3">
+                                        <button type="button" class="btn btn-success col-md-6" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="novoTopico(<?php echo $parametros;?>)">Adcionar Tópico <?php echo ($key+1)."-".(sizeof($value["subconteudos"])+1);?></button>
                                     </div>
                             <?php };?>
                             <?php foreach ($value["subconteudos"] as $key2 => $subconteudo) {?>
@@ -142,16 +119,16 @@ if($row = mysqli_fetch_assoc($resultado)){
                                         $parametros2 = "'subconteudo','".$subconteudo["titulo"]."','".$subconteudo["id"]."','".$value["id"]."'";    
                                     ?>
                                         <button type="button" class="btn btn-primary pt-1 pb-1" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="editTopico(<?php echo $parametros2;?>)"><img src="images/edit.png" alt="Editar"></button>
-                                        <a href="../backend/excluirsubconteudo.php?id=<?php echo $subconteudo['id'].'&artefato='.$id;?>" class="btn btn-danger  pt-1 pb-1"><img src="images/delete.png" alt="Deletar"></a>
+                                        <a href="../backend/excluirsubconteudo.php?id=<?php echo $subconteudo['id'].'&artefato='.$id;?>&projeto=<?php echo $projeto;?>" class="btn btn-danger  pt-1 pb-1"><img src="images/delete.png" alt="Deletar"></a>
                                     <?php }?>
                                     <textarea class="form-control" name="subconteudo[<?php echo $subconteudo["id"];?>]" rows="3"><?php echo $subconteudo["texto"];?></textarea>
                                 </div>
                                 <?php if($subconteudo["editavel"]){
                                         $parametros3 = "'subconteudo2','".$subconteudo["titulo"]."','".$subconteudo["id"]."'";   
                                 ?>
-                                        <div class="col-md-4"></div>
-                                        <div class="col-md-8 text-center p-md-3">
-                                            <button type="button" class="btn btn-primary col-md-6" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="novoTopico(<?php echo $parametros3;?>)">Novo Sub Tópico</button>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-10 text-center p-md-3">
+                                            <button type="button" class="btn btn-primary col-md-6" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="novoTopico(<?php echo $parametros3;?>)">Adcionar Tópico <?php echo ($key+1)."-".($key2+1)."-".(sizeof($subconteudo["subconteudos2"])+1);?></button>
                                         </div>
                                 <?php };?>
                                 <?php foreach ($subconteudo["subconteudos2"] as $key3 => $subconteudo2) {?>
@@ -162,7 +139,7 @@ if($row = mysqli_fetch_assoc($resultado)){
                                             $parametros3 = "'subconteudo2','".$subconteudo2["titulo"]."','".$subconteudo2["id"]."','".$subconteudo["id"]."'";    
                                         ?>
                                             <button type="button" class="btn btn-primary pt-1 pb-1" data-bs-toggle="modal" data-bs-target="#adicionarTopico" onclick="editTopico(<?php echo $parametros3;?>)"><img src="images/edit.png" alt="Editar"></button>
-                                            <a href="../backend/excluirsubconteudo2.php?id=<?php echo $subconteudo2['id'].'&artefato='.$id;?>" class="btn btn-danger  pt-1 pb-1"><img src="images/delete.png" alt="Deletar"></a>
+                                            <a href="../backend/excluirsubconteudo2.php?id=<?php echo $subconteudo2['id'].'&artefato='.$id;?>&projeto=<?php echo $projeto;?>" class="btn btn-danger  pt-1 pb-1"><img src="images/delete.png" alt="Deletar"></a>
                                         <?php }?>
                                         <textarea class="form-control" name="subconteudo2[<?php echo $subconteudo2["id"];?>]" rows="3"><?php echo $subconteudo2["texto"];?></textarea>
                                     </div>
@@ -198,12 +175,12 @@ if($row = mysqli_fetch_assoc($resultado)){
                     <br><br><br>
                     <button type="submit" class="btn btn-primary col-md-6">Salvar</button>
                     <br><br>
-                    <button type="button" onclick="confirmarSair(<?php echo $id;?>)" class="btn btn-warning col-md-6">Cancelar</button>
+                    <button type="button" onclick="confirmarSair(<?php echo $id.','.$projeto;?>)" class="btn btn-warning col-md-6">Cancelar</button>
                 </div>
             </div>
         </form>
         <script src="editImagem.js"></script>
-        <form action="../backend/excluirAnexos.php?id=<?php echo $id;?>" method="post">
+        <form action="../backend/excluirAnexos.php?id=<?php echo $id;?>&projeto=<?php echo $projeto;?>" method="post">
             <div class="modal fade" id="excluirAnexos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -233,7 +210,7 @@ if($row = mysqli_fetch_assoc($resultado)){
                 </div>
             </div>
         </form>
-        <form action="../backend/adcionarItem.php?artefato=<?php echo $id;?>" method="post">
+        <form action="../backend/adcionarItem.php?artefato=<?php echo $id;?>&projeto=<?php echo $projeto;?>" method="post">
             <div class="modal fade" id="adicionarTopico" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -261,7 +238,7 @@ if($row = mysqli_fetch_assoc($resultado)){
     </div>
     <br/><br/><br/>
     <script>
-        function confirmarSair(id) {
+        function confirmarSair(id,projeto) {
             return swal({
                 title: "Sair sem salvar!",
                 icon: "error",
@@ -285,7 +262,7 @@ if($row = mysqli_fetch_assoc($resultado)){
             })
             .then(response =>{
                 if(response){
-                    window.location.href = "viewArtefato.php?id=" + id;
+                    window.location.href = "viewArtefato.php?id=" + id+"&projeto=" + projeto;
                 }
             })
         }

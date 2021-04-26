@@ -9,18 +9,21 @@ if(!isset($_SESSION['idUser'])){
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 include_once("../backend/conexao.php");
+include_once("../backend/acessarProjeto.php");
+$nomeProjeto = acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"]; 
 
 $user = $_SESSION["user"];
 
 $id = $_GET["id"];
 
-$parametros = "f.id as fase, i.nome as iteracao, di.disciplina, di.tempo";
+$parametros = "f.nome as fase, i.nome as iteracao, di.disciplina, di.tempo";
 $consulta = "SELECT $parametros FROM fase f inner join iteracao i on (f.id = i.id_fase) inner join disciplina_iteracao di on (di.id_iteracao = i.id) where di.id = '$id'";
 
 $resultado = mysqli_query($conexao, $consulta);
 
 $dados = [];
-$fases = ["Início","Elaboração","Contrução","Transição"];
+$fases = ["inicio" => "Início", "elaboracao" => "Elaboração", "construcao" => "Contrução", "transicao" => "Transição"];
 $disciplinas = [
     "D1" => "Modelo de Negócios",
     "D2" => "Requisitos",
@@ -35,7 +38,7 @@ $disciplinas = [
 $disciplinaCod = 0;
 if($row = mysqli_fetch_assoc($resultado)){
     $dados = [
-        "fase" => $fases[$row["fase"]-1],
+        "fase" => $fases[$row["fase"]],
         "iteracao" => $row["iteracao"],
         "disciplina" => $disciplinas[$row["disciplina"]],
         "tempo" => $row["tempo"]
@@ -69,43 +72,23 @@ while ($row = mysqli_fetch_assoc($resultado)) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>
-            function confirmarSenhaForm() {
-                var senha = document.querySelector("#novaSenha").value;
-                if(!senha){
-                    var alertSenha = document.querySelector("#alertSenha");
-                    alertSenha.innerText = "Preencha todos os campos!";
-                    alertSenha.classList.remove("d-none");
-                    return false;
-                }
-                else{
-                    var senhaConfirmar = document.querySelector("#confirmarSenha").value;
-                    if(senha == senhaConfirmar){
-                        return true;
-                    }
-                    else{
-                        var alertSenha = document.querySelector("#alertSenha");
-                        alertSenha.innerText = "Senhas Diferentes!";
-                        alertSenha.classList.remove("d-none");
-                        return false;
-                    }
-                }
-            }
-        </script>
+        <script src="confirmarSenha.js"></script>
     </head>
     <body >
         <div class="container tema">
             <div class="row">
                 <div class="col-md-1">
-                    <a href="canvas.php"><img class="back" src="images/back.png" alt="Voltar"></a>
+                    <a href="canvas.php?projeto=<?php echo $projeto;?>"><img class="back" src="images/back.png" alt="Voltar"></a>
                 </div>
                 <div class="col-md-10">
                     <div class="content">
                         <div id="titlecontent">
-                            <?php echo $dados["fase"]." - ".$dados["iteracao"]." - ".$dados["disciplina"];?>
+                            <?php echo $nomeProjeto;?>
                         </div>
                         <div id="content" class="p-md-2 me-md-5">
-                            
+                            <div class="text-center">
+                                <h2><?php echo $dados["fase"]." - ".$dados["iteracao"]." - ".$dados["disciplina"];?></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +120,7 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                             </div>
                         </div>
                     </div>
-                    <form action="alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
+                    <form action="../backend/alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
                         <div class="modal fade" id="modalAlterarSenha" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -149,19 +132,19 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                                         <div class="form-group row">
                                             <label htmlFor="senhaAtual" class="col-sm-4 col-form-label"> Senha Atual: </label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" id="senhaAtual" placeholder="Senha Atual"/>
+                                                <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label htmlFor="novaSenha" class="col-sm-4 col-form-label"> Nova Senha: </label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" id="novaSenha" placeholder="Nova Senha"/>
+                                                <input type="password" class="form-control" id="novaSenha" name="novaSenha" placeholder="Nova Senha"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label htmlFor="confirmarSenha" class="col-sm-4 col-form-label"> Confirmar Senha: </label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" id="confirmarSenha" placeholder="Confirmar Senha"/>
+                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar Senha"/>
                                             </div>
                                         </div>
                                         <div class="alert alert-danger d-none" role="alert" id="alertSenha">
@@ -175,7 +158,7 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                                 </div>
                             </div>
                         </div>
-                    </form>    
+                    </form>   
                 </div>
             </div>
             <div class="row">
@@ -189,12 +172,12 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                             ?>
                                     <li>
                                         <h4>
-                                            <a href='viewArtefato.php?id=<?php echo $idArtefato?>'><?php echo $nome?></a>
+                                            <a href='viewArtefato.php?id=<?php echo $idArtefato?>&projeto=<?php echo $projeto;?>'><?php echo $nome?></a>
                                             <?php if($artefatos[$i]["renomeavel"]){
-                                                $parametros = "'$idArtefato','$nome'";
+                                                $parametros = "'$idArtefato','$nome','$id','$projeto'";
                                             ?>
                                                 <button type="button" class="btn btn-primary pt-1 pb-1" data-bs-toggle="modal" data-bs-target="#renomear" onclick="renomear(<?php echo $parametros;?>)"><img src="images/edit.png" alt="Editar"></button>
-                                                <button type="button" class="btn btn-danger pt-1 pb-1" onclick="deletarArtefato(<?php echo $parametros;?>,'<?php echo $id;?>')"><img src="images/delete.png" alt="Excluir"></button>
+                                                <button type="button" class="btn btn-danger pt-1 pb-1" onclick="deletarArtefato(<?php echo $parametros;?>)"><img src="images/delete.png" alt="Excluir"></button>
                                             <?php }?>
                                         </h4>
                                     </li>
@@ -202,7 +185,7 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                         </ul>
                 </div>
             </div>
-            <form action="../backend/renameArtefato.php?disciplina=<?php echo $id;?>" method="post">
+            <form action="../backend/renameArtefato.php?disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" method="post">
                 <div class="modal fade" id="renomear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -225,12 +208,56 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                     </div>
                 </div>
             </form>
+            
             <br><br><br><br><br>
+            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#salvarTempo">Alterar Esforço na Disciplina</button>                         
+            <form action="../backend/editarDisciplina.php?id=<?php echo $id;?>&projeto=<?php echo $projeto;?>" method="post">
+                <div class="modal fade" id="salvarTempo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Salvar Esforço na Disciplina</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <label for="tempo" class="col-form-label col-md-4">Tempo gasto: </label>
+                                    <div class="col-md-2">
+                                        <input type="range" class="form-range" id="tempo" name="tempo" value="<?php echo $dados['tempo'];?>" min="0" max="25" oninput="display.value=value" onchange="display.value=value">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" id="display" value="<?php echo $dados['tempo'];?>" oninput="tempo.value=value" onchange="tempo.value=value" min="0" max="25">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <?php if($disciplinaCod == "D1"){?>
                 <div class="row">
                     <div class="col-md-8 text-center">
-                        <a href="../backend/novoArtefato.php?tipo=1&disciplina=<?php echo $id;?>" class="btn btn-primary col-md-10 mb-2">Novo Artefato de Casos de Usos de Negócios</a>
-                        <a href="../backend/novoArtefato.php?tipo=2&disciplina=<?php echo $id;?>" class="btn btn-primary col-md-10">Novo Artefato de Realização de Casos de Usos de Negócios</a>
+                        <a href="../backend/novoArtefato.php?tipo=1&disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" class="btn btn-primary col-md-10 mb-2">Novo Artefato de Casos de Usos de Negócios</a>
+                        <a href="../backend/novoArtefato.php?tipo=2&disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" class="btn btn-primary col-md-10">Novo Artefato de Realização de Casos de Usos de Negócios</a>
+                    </div>
+                </div>
+            <?php }
+              else if($disciplinaCod == "D2"){?>
+                <div class="row">
+                    <div class="col-md-8 text-center">
+                        <a href="../backend/novoArtefato.php?tipo=3&disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" class="btn btn-primary col-md-10 mb-2">Novo Artefato de Casos de Usos</a>
+                        <a href="../backend/novoArtefato.php?tipo=4&disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" class="btn btn-primary col-md-10"> Novo Artefato de Requisitos de Software Para < Subsistema ou Recurso></a>
+                    </div>
+                </div>
+            <?php }
+            else if($disciplinaCod == "D3"){?>
+                <div class="row">
+                    <div class="col-md-8 text-center">
+                        <a href="../backend/novoArtefato.php?tipo=5&disciplina=<?php echo $id;?>&projeto=<?php echo $projeto;?>" class="btn btn-primary col-md-10 mb-2">Novo Artefato de Realização de Casos de Usos</a>
                     </div>
                 </div>
             <?php }?>
@@ -243,7 +270,7 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                 idCampo.value = id;
             }
 
-            function deletarArtefato(id,nome,disciplina) {
+            function deletarArtefato(id,nome,disciplina,projeto) {
                 return swal({
                     title: "Excluir Artefato",
                     icon: "error",
@@ -267,7 +294,7 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                 })
                 .then(response =>{
                     if(response){
-                        window.location.href = "../backend/deletarArtefato.php?id=" + id+"&disciplina=" + disciplina;
+                        window.location.href = "../backend/deletarArtefato.php?id=" + id+"&disciplina=" + disciplina + "&projeto=" + projeto;
                     }
                 })
             }

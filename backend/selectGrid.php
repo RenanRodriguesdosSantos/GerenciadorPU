@@ -8,14 +8,17 @@ if(!isset($_SESSION['idUser'])){
 }
 
 include_once("conexao.php");
+include_once("acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
 
 $parametros = "f.id as idf, f.nome as nomef, i.id as idi, i.nome as nomei, di.id as iddi, di.disciplina, di.tempo";
-$consulta = "SELECT $parametros FROM fase f inner join iteracao i on (f.id = i.id_fase) inner join disciplina_iteracao di on (di.id_iteracao = i.id)";
+$consulta = "SELECT $parametros FROM fase f inner join iteracao i on (f.id = i.id_fase) inner join disciplina_iteracao di on (di.id_iteracao = i.id) WHERE f.id_projeto = '$projeto'";
 $resultado = mysqli_query($conexao, $consulta);
 
 $fases = array();
 $rows = [];
-$i = 0;
+
 while($row = mysqli_fetch_assoc($resultado)){
     $rowAux = [
         "idf" => $row["idf"],
@@ -26,7 +29,7 @@ while($row = mysqli_fetch_assoc($resultado)){
         "disciplina" => $row["disciplina"],
         "tempo" => $row["tempo"]
     ];
-    $rows[$i++] = $rowAux;
+    $rows[] = $rowAux;
 }
 
 $inicio = array();
@@ -35,17 +38,17 @@ $construcao = array();
 $transicao = array();
 
 foreach ($rows as  $value) {
-    switch ($value["idf"]) {
-        case '1':
+    switch ($value["nomef"]) {
+        case 'inicio':
             $inicio[sizeof($inicio)] = $value;
             break;
-        case '2':
+        case 'elaboracao':
             $elaboracao[sizeof($elaboracao)] = $value;
             break;
-        case '3':
+        case 'construcao':
             $construcao[sizeof($construcao)] = $value;
             break;
-        case '4':
+        case 'transicao':
             $transicao[sizeof($transicao)] = $value;
             break;
     }

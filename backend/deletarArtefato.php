@@ -8,6 +8,10 @@ if(!isset($_SESSION['idUser'])){
 }
 
 include_once("conexao.php");
+include_once("acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
+
 $id = $_GET["id"];
 
 $consulta = "SELECT renomeavel FROM artefatos WHERE id = '$id'";
@@ -17,9 +21,10 @@ if($row = mysqli_fetch_assoc($resultado)){
         $consulta = "DELETE FROM artefatos WHERE id = '$id'";
         mysqli_query($conexao,$consulta);
         $disciplina = $_GET["disciplina"];
-        header("Location: ../frontend/viewDisciplina.php?id=$disciplina");
+        header("Location: ../frontend/viewDisciplina.php?id=$disciplina&projeto=$projeto");
     }
     else{
-        echo "Não é possivel excluir um artefato que não seja renomeavel";
+        echo "<h1>Não é possivel excluir um artefato que não seja renomeavel</h1>";
+        echo "<h2><a href='../frontend/viewDisciplina.php?id=$disciplina&projeto=$projeto'>Voltar</a></h2>";
     }
 }

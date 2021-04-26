@@ -24,7 +24,7 @@ if($admin){
         ];
     }
 
-    $consulta = "SELECT u.user as nome, u.id FROM users u LEFT JOIN users_projeto up ON (u.id = up.user) INNER JOIN projeto p ON (p.id = up.projeto) WHERE up.user IS NULL AND p.id = '$projeto'";
+    $consulta = "SELECT user as nome, id FROM users";
     $resultado = mysqli_query($conexao,$consulta);
 
     $users = [];
@@ -63,9 +63,10 @@ if($admin){
             <div class="row">
                 <h3>Adicionar: </h3>
                 <br><br><br>
-                <form action="../backend/adicionarUser.php?projeto=<?php echo $projeto;?>" method="post"></form>
+                <form action="../backend/adicionarUser.php?projeto=<?php echo $projeto;?>" method="post">
                     <div class="col-md-5">
-                        <select name="usuario" id="usuario" class="form-control" requered>
+                        <select name="usuario" id="usuario" class="form-control" required>
+                            <option value="" >SELECIONE</option>
                             <?php foreach ($users as $key => $value) { ?>
                                     <option value="<?php echo $value["id"];?>"><?php echo $value["nome"];?></option>
                             <?php }?>

@@ -37,6 +37,7 @@ while ($row = mysqli_fetch_assoc($resutado)) {
     <title>ControlRup</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="confirmarSenha.js"></script>
 </head>
 <body>
     <div class="container">
@@ -72,7 +73,7 @@ while ($row = mysqli_fetch_assoc($resutado)) {
                         </div>
                     </div>
                 </div>
-                <form action="alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
+                <form action="../backend/alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
                     <div class="modal fade" id="modalAlterarSenha" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -132,6 +133,7 @@ while ($row = mysqli_fetch_assoc($resutado)) {
                                 ?>
                                 <button type="button" class="btn btn-success col-md-12 border" data-bs-toggle="modal" data-bs-target="#editProjeto" onclick="editProjeto(<?php echo $parametros;?>)">Editar</button>
                                 <a href="adicionarUsuario.php?projeto=<?php echo $value["id"];?>" class="btn btn-success col-md-12 border">Adicionar Usuário</a>
+                                <button type="button" class="btn btn-danger col-md-12 border" data-bs-toggle="modal" data-bs-target="#excluirProjeto" onclick="excluirProjeto(<?php echo $parametros;?>)">Excluir</button>
                             <?php }?>
                         </div>
                     </div>
@@ -166,6 +168,31 @@ while ($row = mysqli_fetch_assoc($resutado)) {
                     </div>
                 </div>
             </form>
+
+            <form action="../backend/excluirProjeto.php" method="post">
+                <div class="modal fade" id="excluirProjeto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content text-start">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="tituloExcluir">Projeto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <label for="anexos" class="form-label">Informe sua senha para confirmar a exclusão: </label>
+                                    <input type="password" name="senha" id="senha" class="form-control" required placeholder="Senha">
+                                    <input type="hidden" name="id" id="idExcluir">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
             <div class="row">
                 <hr>
                 <div class="col-md-12 text-center"><h5>Área do Administrador</h5></div>
@@ -181,6 +208,12 @@ while ($row = mysqli_fetch_assoc($resutado)) {
                 var campoDescricao = document.querySelector("#descricao");
                 campoNome.value = nome;
                 campoDescricao.value = descricao;
+                campoId.value = id;
+            }
+            function excluirProjeto(nome,descricao,id) {
+                var campoNome = document.querySelector("#tituloExcluir");
+                var campoId = document.querySelector("#idExcluir");
+                campoNome.innerText = "Excluir Projeto: " + nome;
                 campoId.value = id;
             }
         </script>  

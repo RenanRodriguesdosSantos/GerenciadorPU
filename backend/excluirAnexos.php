@@ -7,6 +7,9 @@ if(!isset($_SESSION['idUser'])){
     header("location: index.php");
 }
 include_once("conexao.php");
+include_once("acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
 
 $anexos = $_POST["anexos"];
 $id = $_GET["id"];
@@ -15,5 +18,5 @@ foreach ($anexos as $value) {
     $consulta = "DELETE FROM anexos WHERE id = '$value'";
     $resultado = mysqli_query($conexao, $consulta);
 }
-
-header("Location: ../frontend/viewArtefato.php?id=$id");
+$projeto = $_GET["projeto"];
+header("Location: ../frontend/viewArtefato.php?id=$id&projeto=$projeto");

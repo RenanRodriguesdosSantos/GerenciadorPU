@@ -7,7 +7,11 @@ if(!isset($_SESSION['idUser'])){
     header("location: ../index.php");
 }
 include_once("../backend/conexao.php");
+include_once("../backend/acessarProjeto.php");
+$nomeProjeto = acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"]; 
 $id = $_GET["id"];
+$user = $_SESSION["user"];
 $disciplinas = [
     "D1" => "Modelo de Negócios",
     "D2" => "Requisitos",
@@ -20,19 +24,18 @@ $disciplinas = [
     "D9" => "Ambiente"
 ];
 
-$fases = ["Início","Elaboração","Contrução","Transição"];
-
-$consulta = "SELECT a.id_disciplina_iteracao, a.nome, di.disciplina, i.nome as iteracao, i.id_fase as fase FROM artefatos a INNER JOIN disciplina_iteracao di ON(a.id_disciplina_iteracao = di.id) INNER JOIN iteracao i ON (di.id_iteracao = i.id) WHERE a.id = '$id'";
+$fases = ["inicio" => "Início","elaboracao" => "Elaboração", "construcao" => "Contrução", "transicao" => "Transição"];
+$numeroFase = ["inicio" => 1, "elaboracao" => 2, "construcao" => 3, "transicao" => 4];
+$consulta = "SELECT a.id_disciplina_iteracao, a.nome, di.disciplina, i.nome as iteracao, f.nome as fase FROM artefatos a INNER JOIN disciplina_iteracao di ON(a.id_disciplina_iteracao = di.id) INNER JOIN iteracao i ON (di.id_iteracao = i.id) INNER JOIN fase f ON (i.id_fase = f.id) WHERE a.id = '$id'";
 $resultado = mysqli_query($conexao, $consulta);
 if($row = mysqli_fetch_assoc($resultado)){
     $idDisciplina = $row["id_disciplina_iteracao"];
     $nomeArtefato = $row["nome"];
     $disciplina = $disciplinas[$row["disciplina"]];
-    $fase = $fases[$row["fase"] - 1];
+    $fase = $fases[$row["fase"]];
     $iteracao = $row["iteracao"];
+    $versaoArt = $row["iteracao"]."-".$numeroFase[$row["fase"]].".".$row["iteracao"][1];
 }
-
-
 
 $consulta = "SELECT * FROM conteudo WHERE id_artefato = '$id'";
 
@@ -90,15 +93,15 @@ while ($row = mysqli_fetch_assoc($resultado)) {
 
 $artefatos = [];
 
-$consulta = "SELECT a.id, f.id as fase, i.id as iteracao, a.nome, u.user as autor, a.data FROM artefatos a INNER JOIN disciplina_iteracao di ON (a.id_disciplina_iteracao = di.id) INNER JOIN iteracao i ON (di.id_iteracao = i.id) INNER JOIN fase f ON (i.id_fase = f.id) INNER JOIN users u ON (a.autor = u.id) WHERE a.nome LIKE '$nomeArtefato'";
-
+$consulta = "SELECT a.id, f.nome as fase, i.nome as iteracao, a.nome, u.user as autor, a.data FROM artefatos a INNER JOIN disciplina_iteracao di ON (a.id_disciplina_iteracao = di.id) INNER JOIN iteracao i ON (di.id_iteracao = i.id) INNER JOIN fase f ON (i.id_fase = f.id) INNER JOIN users u ON (a.autor = u.id) WHERE a.nome LIKE '$nomeArtefato' AND f.id_projeto = '$projeto'";
+$numeroFase = ["inicio" => 1, "elaboracao" => 2, "construcao" => 3, "transicao" => 4];
 $resultado = mysqli_query($conexao,$consulta);
 while ($row = mysqli_fetch_assoc($resultado)) {
     $data = new DateTime($row["data"]);
     $data = $data->format("d/m/y");
     $artefatos[] = [
         "id" => $row["id"],
-        "versao" => $row["fase"].".".$row["iteracao"],
+        "versao" => $row["iteracao"]."-".$numeroFase[$row["fase"]].".".$row["iteracao"][1],
         "nome" => $row["nome"],
         "autor" => $row["autor"],
         "data" => $data
@@ -117,30 +120,99 @@ while ($row = mysqli_fetch_assoc($resultado)) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <script src="confirmarSenha.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="row mb-4">
             <div class="col-md-1">
-                <a href="viewDisciplina.php?id=<?php echo $idDisciplina;?>"><img class="back" src="images/back.png" alt="Voltar"></a>
+                <a href="viewDisciplina.php?id=<?php echo $idDisciplina;?>&projeto=<?php echo $projeto;?>"><img class="back" src="images/back.png" alt="Voltar"></a>
             </div>
-            <div class="col-md-11 pt-4">
+            <div class="col-md-10 pt-4">
                 <h2 class="text-center"><?php echo $nomeArtefato;?><h2>
+            </div>
+            <div class="col-md-1">
+                <div class="btn-group mt-md-3 dropend">
+                    <button class="btn btn-success btn-lg text-uppercase rounded-circle pb-md-2 pt-md-2 ps-md-3 pe-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo str_split($user)[0];?>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><p class="dropdown-item text-center text-uppercase"><?php echo $user;?></p></li>
+                        <li><button class="btn bg-info text-center col-md-12 border dropdown-item" data-bs-toggle="modal" data-bs-target="#modalAlterarSenha">Alterar Senha</button></li>
+                        <li><button class="btn bg-info text-center col-md-12 border dropdown-item" data-bs-toggle="modal" data-bs-target="#modalConfirmarSair">Sair</button></li>
+                    </ul>
+                </div>
+                <div class="modal fade" id="modalConfirmarSair" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Sair</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Deseja Realmente Sair?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <a href="../backend/sair.php" class="btn btn-danger">Confirmar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form action="../backend/alterarSenha.php" method="post" onsubmit="return confirmarSenhaForm()">
+                    <div class="modal fade" id="modalAlterarSenha" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Alterar Senha</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group row">
+                                        <label htmlFor="senhaAtual" class="col-sm-4 col-form-label"> Senha Atual: </label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label htmlFor="novaSenha" class="col-sm-4 col-form-label"> Nova Senha: </label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="form-control" id="novaSenha" name="novaSenha" placeholder="Nova Senha"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label htmlFor="confirmarSenha" class="col-sm-4 col-form-label"> Confirmar Senha: </label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar Senha"/>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-danger d-none" role="alert" id="alertSenha">
+                                        Senhas Diferentes!
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>   
             </div>
         </div>
         <div class="row">
             <div class="col-md-2 border-end pe-4 border-dark">
                 <div class="row">
                     <div class="col text-center">
-                        <?php echo "Fase: <br> <h4>$fase</h4> <br> Iteração: <br> <h4>$iteracao</h4> <br> Disciplina: <br> <h4>$disciplina</h4>";?>
+                        <?php echo "Projeto: <br> <h4>$nomeProjeto</h4> <br> Fase: <br> <h4>$fase</h4> <br> Iteração: <br> <h4>$iteracao</h4> <br> Disciplina: <br> <h4>$disciplina</h4>";?>
                     </div>
                 </div>
                 <br><br>
                 <div class="row">
-                    <a class="btn btn-success border" href="editArtefato.php?id=<?php echo $id;?>">Editar Artefato</a>
+                    <a class="btn btn-primary border" href="editArtefato.php?id=<?php echo $id;?>&projeto=<?php echo $projeto;?>">Editar Artefato</a>
                 </div>
                 <div class="row">
-                    <a class="btn btn-success border" href="viewArtefato.php?id=<?php echo $id;?>" download="artefato.html">Baixar Artefato</a>
+                    <a class="btn btn-success border" href="viewArtefato.php?id=<?php echo $id;?>&projeto=<?php echo $projeto;?>" download="artefato.html">Baixar Artefato</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -152,11 +224,13 @@ while ($row = mysqli_fetch_assoc($resultado)) {
                             <th scope="col">Descrição</th>
                             <th scope="col">Autor</th>
                         </tr>
-                        <?php foreach ($artefatos as $value) {?>
-                            <tr>
+                        <?php foreach ($artefatos as $value) {
+                            $classe = $value["versao"] == $versaoArt?"table-dark":"";
+                        ?>
+                            <tr class="<?php echo $classe;?>">
                                 <td><?php echo $value["data"];?></td>
                                 <td><?php echo $value["versao"];?></td>
-                                <td><a href="viewArtefato.php?id=<?php echo $value["id"];?>"><?php echo $value["nome"];?></a></td>
+                                <td><a href="viewArtefato.php?id=<?php echo $value["id"];?>&projeto=<?php echo $projeto;?>"><?php echo $value["nome"];?></a></td>
                                 <td><?php echo $value["autor"];?></td>
                             </tr>
                         <?php }?> 

@@ -6,12 +6,25 @@ if(!isset($_SESSION['idUser'])){
     session_unset();
     header("location: index.php");
 }
-
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 include_once("conexao.php");
+include_once("acessarProjeto.php");
+acessarProjeto($_GET["projeto"],$conexao);
+$projeto = $_GET["projeto"];
+
 
 $fase = $_GET["fase"];
 
+$nomesFases = ["inicio","elaboracao","construcao","transicao"];
+
+$nomeFase = $nomesFases[$fase - 1];
+
+$consulta = "SELECT id FROM fase WHERE id_projeto = '$projeto' AND nome LIKE '$nomeFase'";
+$resultado = mysqli_query($conexao,$consulta);
+
+if($row = mysqli_fetch_assoc($resultado)){
+    $idFase = $row["id"];
+}
 
 $nomes = ["I","E","C","T"];
 mysqli_begin_transaction($conexao);
@@ -20,14 +33,14 @@ try {
     $nome = $nomes[$fase-1];
     $autor = $_SESSION["idUser"];
     $consultas = "
-        SET @idFase = '$fase';
+        SET @idFase = '$idFase';
         
         WHILE (SELECT (EXISTS (SELECT id FROM iteracao WHERE id_fase = @idFase ORDER BY id DESC LIMIT 1)) = 0) DO
             SET @idFase = @idFase - 1;
         END WHILE;
         SET @idUltimaIteracao = (SELECT id FROM iteracao WHERE id_fase = @idFase ORDER BY id DESC LIMIT 1);
-        SET @nomeIteracao = (SELECT COUNT(id) FROM iteracao WHERE id_fase = '$fase') + 1;
-        INSERT INTO iteracao (nome,id_fase) VALUES (CONCAT('$nome',@nomeIteracao),'$fase');
+        SET @nomeIteracao = (SELECT COUNT(id) FROM iteracao WHERE id_fase = '$idFase') + 1;
+        INSERT INTO iteracao (nome,id_fase) VALUES (CONCAT('$nome',@nomeIteracao),'$idFase');
         SET @idIteracao = (SELECT id FROM iteracao ORDER BY id DESC LIMIT 1);
         SET @iDisc = 1;
         
@@ -87,7 +100,8 @@ try {
         } while (mysqli_next_result($conexao));
     }
     mysqli_commit($conexao);
-    header("Location: ../frontend/canvas.php");
+    $projeto = $_GET["projeto"];
+    header("Location: ../frontend/canvas.php?projeto=$projeto");
 } catch (mysqli_sql_exception $e) {
     mysqli_rollback($conexao);
     throw $e;
