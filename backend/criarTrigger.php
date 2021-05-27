@@ -1,5 +1,8 @@
-#trigger PROJETO
-DELIMITER $$
+<?php /*
+
+include_once("conexao.php");
+
+$consultas = "
 CREATE TRIGGER TRG_AFTER_INSERT_PROJETO AFTER INSERT ON projeto
 FOR EACH ROW
 BEGIN
@@ -573,5 +576,14 @@ BEGIN
     INSERT INTO fase(nome,id_projeto) VALUE ('construcao',new.id);                     
     INSERT INTO fase(nome,id_projeto) VALUE ('transicao',new.id); 
 
-END $$
-DELIMITER ;
+END
+
+";
+
+if (mysqli_multi_query($conexao, $consultas)) {
+        do {
+            if ($result = mysqli_store_result($conexao)) {
+                mysqli_free_result($result);
+            }
+        } while (mysqli_next_result($conexao));
+    }

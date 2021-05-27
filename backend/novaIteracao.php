@@ -99,6 +99,7 @@ try {
             }
         } while (mysqli_next_result($conexao));
     }
+
     mysqli_commit($conexao);
     $projeto = $_GET["projeto"];
     header("Location: ../frontend/canvas.php?projeto=$projeto");

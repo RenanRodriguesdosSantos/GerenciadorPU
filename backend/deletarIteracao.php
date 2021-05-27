@@ -21,14 +21,15 @@ $nomesFases = ["inicio","elaboracao","construcao","transicao"];
 
 $nomeFase = $nomesFases[$fase - 1];
 
-$consulta = "SELECT i.id FROM iteracao i INNER JOIN fase f ON(i.id_fase = f.id) WHERE f.id_projeto = '$projeto' AND f.nome LIKE '$nomeFase' ORDER by id DESC LIMIT 1";
+$consulta = "SELECT i.id, i.nome FROM iteracao i INNER JOIN fase f ON(i.id_fase = f.id) WHERE f.id_projeto = '$projeto' AND f.nome LIKE '$nomeFase' ORDER by id DESC LIMIT 1";
 $resultado = mysqli_query($conexao, $consulta);
 $idIteracao = null;
 $projeto = $_GET["projeto"];
 if($row = mysqli_fetch_assoc($resultado)){
     $idIteracao = $row["id"];
+    $nomeIteracao = $row["nome"];
 }
-if(!($idIteracao == 1 && $fase == 1)){
+if($nomeIteracao != 'I1'){
     mysqli_begin_transaction($conexao);
     try {
         $consulta = "DELETE FROM iteracao WHERE id = '$idIteracao'";
